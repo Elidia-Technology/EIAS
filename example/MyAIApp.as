@@ -1,0 +1,56 @@
+
+/**
+ * MIT License
+
+Copyright (c) 2025 Saleem Ahmad
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+ */
+package app {
+    import ai.AIModel;
+    import patterns.Singleton;
+    import utils.Timer;
+    import net.URLRequest;
+
+    public class MyAIApp extends Singleton {
+        public var ai:AIModel;
+
+        public function MyAIApp() {
+            ai = new AIModel("gpt", { apiKey: process.env.OPENAI_KEY });
+        }
+
+        public function run():void {
+            ai.generateText("Tell me a story about a dragon.").then((story:String) => {
+                trace("Generated Story: " + story);
+            });
+
+            var req:URLRequest = new URLRequest("https://jsonplaceholder.typicode.com/posts");
+            req.load().then((data:Object) => {
+                trace("Loaded JSON: " + JSON.stringify(data));
+            });
+
+            var t:Timer = new Timer(1000, this.onTick);
+            t.start();
+        }
+
+        private function onTick():void {
+            trace("Tick event fired");
+        }
+    }
+}
